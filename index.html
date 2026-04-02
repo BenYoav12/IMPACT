@@ -47,7 +47,7 @@ a, button, input, select, textarea, .tab, .btn, .wl-row, .wl-pin, .csel-face, .c
 .custom-dd-selected, .custom-dd-item, .unit-btn, .tog {
   touch-action: manipulation;
 }
-html { height: 100%; scroll-behavior: smooth; }
+html { height: 100%; scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--bg);
   color: var(--text);
@@ -169,10 +169,11 @@ body {
   display: inline-flex; align-items: center; opacity: 0.7;
 }
 .lock-icon svg { width: 12px; height: 12px; fill: var(--text-dim); }
-.field.locked input, .field.locked select {
+.field.locked input, .field.locked select, .field.locked .csel-face {
   opacity: 0.5; cursor: not-allowed;
   background: var(--surface) !important;
   border-color: var(--border) !important;
+  pointer-events: none;
 }
 input[type=number], input[type=text], select {
   background: var(--surface2); color: var(--text-hi);
@@ -357,6 +358,35 @@ select option { background: var(--surface); color: var(--text); }
   align-items: flex-end; margin-bottom: 16px;
 }
 .dope-ctrl .field { min-width: 100px; }
+.dope-cols-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 12px;
+}
+.dope-cols-grid .tog label {
+  font-size: 13px;
+  line-height: 1.2;
+}
+@media (max-width: 640px) {
+  .dope-cols-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 8px;
+  }
+  .dope-cols-grid .tog {
+    min-height: 36px;
+    padding: 4px 0;
+  }
+  .dope-cols-grid .tog label {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .dope-cols-grid .tog input[type=checkbox] {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+}
 .table-wrap { overflow-x: auto; border-radius: 8px; box-shadow: var(--shadow-md); }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 thead tr { background: linear-gradient(180deg, var(--surface3) 0%, var(--surface2) 100%); }
@@ -533,6 +563,39 @@ tbody tr:nth-child(5n) { border-bottom: 2px solid var(--border2); }
 .gun-editor .tog { font-size: 9px; }
 .gun-editor .tog label { font-size: 9px; }
 .gun-editor .btn { font-size: 9px; padding: 5px 12px; min-height: 28px; }
+.ammo-lot-panel {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 4px; padding: 4px 8px; margin-bottom: 2px;
+  overflow: visible;
+}
+.ammo-lot-panel label { font-size: 9px !important; letter-spacing: 1px; opacity: 0.6; }
+.ammo-lot-panel select,
+.ammo-lot-panel input {
+  height: 26px !important; min-height: 26px !important;
+  font-size: 11px !important; padding: 0 8px !important;
+  border-radius: 4px; box-sizing: border-box;
+}
+.ammo-lot-panel .btn {
+  height: 26px !important; min-height: 26px !important;
+  font-size: 9px !important; padding: 0 8px !important;
+  letter-spacing: 0.5px; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.ammo-lot-panel .csel { width: 100%; }
+.ammo-lot-panel .csel-face {
+  min-height: 26px !important; height: 26px !important;
+  font-size: 11px !important; padding: 2px 28px 2px 8px !important;
+  border-radius: 4px;
+}
+.ammo-lot-panel .csel-opts {
+  max-height: 192px; overflow-y: auto;
+  border-radius: 0 0 4px 4px;
+}
+.ammo-lot-panel .csel-opt {
+  min-height: 28px !important; padding: 4px 8px !important;
+  font-size: 11px !important;
+}
+.ammo-lot-panel .csel-arrow { font-size: 8px; right: 8px; }
 .gun-section { display: flex; flex-direction: column; gap: 6px; }
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
@@ -779,72 +842,84 @@ tbody tr:nth-child(5n) { border-bottom: 2px solid var(--border2); }
    MOBILE COMPACT MODE — Maximize data density, minimize scroll
    ================================================================ */
 @media (max-width: 480px) {
-  /* Global spacing reduction */
-  .panel { padding: 6px 6px !important; }
-  .card { padding: 10px 10px; border-radius: 6px; }
-  .sec { font-size: 10px; padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 2px; }
-  .field { gap: 3px; }
-  .field label { font-size: 10px; letter-spacing: 1.5px; }
+  /* Global spacing reduction — 20% tighter than previous */
+  .panel { padding: 4px 4px !important; }
+  .card { padding: 8px 8px; border-radius: 5px; margin-bottom: 6px; }
+  .sec { font-size: 9px; padding-bottom: 3px; margin-bottom: 6px; letter-spacing: 2px; }
+  .field { gap: 2px; margin-bottom: 2px; }
+  .field label { font-size: 9px; letter-spacing: 1.2px; }
 
-  /* Input compactness */
+  /* Input compactness — preserve touch targets */
   input[type=number], input[type=text], select {
-    padding: 6px 8px; min-height: 36px; font-size: 14px; border-radius: 4px;
+    padding: 5px 7px; min-height: 36px; font-size: 14px; border-radius: 4px;
   }
-  .btn { padding: 6px 14px; min-height: 36px; font-size: 10px; }
-  .g2 { gap: 6px !important; }
+  .btn { padding: 5px 12px; min-height: 36px; font-size: 10px; }
+  .g2 { gap: 5px !important; }
 
   /* Engagement layout tightening */
-  .eng-left { gap: 8px; }
-  .eng-grid { gap: 10px !important; }
-  .range-card { padding: 10px 12px; border-radius: 6px; }
-  .range-big { font-size: 36px !important; padding: 4px 0 !important; }
-  .range-big-wrap { margin-top: 2px; }
-  .wind-card { padding: 10px 12px; border-radius: 6px; }
-  .wind-body { gap: 10px; margin-top: 6px; }
-  #wind-clock { width: 90px; height: 90px; }
-  .wind-fields { gap: 6px; }
-  .incl-card { padding: 10px 12px; border-radius: 6px; }
+  .eng-left { gap: 6px; }
+  .eng-grid { gap: 8px !important; }
+  .range-card { padding: 8px 10px; border-radius: 5px; }
+  .range-big { font-size: 34px !important; padding: 3px 0 !important; }
+  .range-big-wrap { margin-top: 1px; }
+  .wind-card { padding: 8px 10px; border-radius: 5px; }
+  .wind-body { gap: 8px; margin-top: 4px; }
+  #wind-clock { width: 84px; height: 84px; }
+  .wind-fields { gap: 5px; }
+  .incl-card { padding: 8px 10px; border-radius: 5px; }
 
   /* Solution readout compaction */
-  .sol-primary { gap: 8px !important; margin-bottom: 10px; }
-  .sol-box { padding: 10px 8px; border-radius: 6px; }
-  .sol-box-lbl { font-size: 10px; letter-spacing: 2px; margin-bottom: 4px; }
-  .sol-box-val { font-size: 36px; }
-  .sol-box-sub { font-size: 10px; margin-top: 4px; }
-  .sol-stats { gap: 4px; margin-bottom: 8px; }
-  .sol-stat { padding: 6px 4px; }
-  .sol-stat-lbl { font-size: 8px; margin-bottom: 2px; }
-  .sol-stat-val { font-size: 14px; }
-  .sol-breakdown { font-size: 11px; }
-  .sol-breakdown-row { padding: 3px 0; }
+  .sol-primary { gap: 6px !important; margin-bottom: 8px; }
+  .sol-box { padding: 8px 6px; border-radius: 5px; }
+  .sol-box-lbl { font-size: 9px; letter-spacing: 2px; margin-bottom: 3px; }
+  .sol-box-val { font-size: 34px; }
+  .sol-box-sub { font-size: 9px; margin-top: 3px; }
+  .sol-stats { gap: 3px; margin-bottom: 6px; }
+  .sol-stat { padding: 5px 3px; }
+  .sol-stat-lbl { font-size: 8px; margin-bottom: 1px; }
+  .sol-stat-val { font-size: 13px; }
+  .sol-breakdown { font-size: 10px; }
+  .sol-breakdown-row { padding: 2px 0; }
 
   /* RTE / MPBR compaction */
-  .rte-grid { gap: 10px !important; }
-  .rte-grid .card { padding: 10px 12px; }
-  .rte-result-box { padding: 10px; font-size: 12px; line-height: 1.6; }
-  .rte-val { font-size: 22px; margin: 2px 0; }
-  .rte-row { padding: 1px 0; font-size: 11px; }
+  .rte-grid { gap: 8px !important; }
+  .rte-grid .card { padding: 8px 10px; }
+  .rte-result-box { padding: 8px; font-size: 11px; line-height: 1.5; }
+  .rte-val { font-size: 20px; margin: 2px 0; }
+  .rte-row { padding: 1px 0; font-size: 10px; }
 
   /* MPBR result grid: force column stack on small screens */
   #mpbr-result > div:first-child {
     display: flex !important; flex-direction: column !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
-  #mpbr-result .rte-val { font-size: 20px; }
+  #mpbr-result .rte-val { font-size: 18px; }
 
   /* Tab bar compaction */
   .tabs { padding: 0 4px !important; }
-  .tab { padding: 8px 12px !important; font-size: 9px !important; letter-spacing: 1px !important; }
+  .tab { padding: 7px 10px !important; font-size: 9px !important; letter-spacing: 1px !important; }
 
   /* Wind clock label */
-  .wind-clock-label { font-size: 9px; margin-top: 2px; }
+  .wind-clock-label { font-size: 9px; margin-top: 1px; }
 
   /* Quick Wind value */
-  #rte-qw-value { font-size: 32px !important; }
-  #rte-qw-unit { font-size: 12px !important; }
+  #rte-qw-value { font-size: 30px !important; }
+  #rte-qw-unit { font-size: 11px !important; }
 
   /* Speed Drop result compact */
-  .sd-result-box { font-size: 12px; }
+  .sd-result-box { font-size: 11px; }
+
+  /* Target card overflow prevention */
+  .target-row { grid-template-columns: 1fr 55px 65px 65px 28px; gap: 4px; padding: 6px 8px; font-size: 11px; }
+  .target-hdr { grid-template-columns: 1fr 55px 65px 65px 28px; gap: 4px; padding: 4px 8px; font-size: 8px; }
+
+  /* DOPE controls wrap tighter */
+  .dope-ctrl { gap: 8px; margin-bottom: 10px; }
+  .dope-ctrl .field { min-width: 80px; }
+
+  /* Dropdown z-index safety */
+  .csel-opts { z-index: 9998 !important; }
+  .custom-dd-list { z-index: 9998 !important; }
 }
 
 /* ── Global micro-interactions ──────────────────────────── */
@@ -895,8 +970,8 @@ input:focus-visible, select:focus-visible {
 <!-- ── Tabs ──────────────────────────────────────────────── -->
 <nav class="tabs" id="main-tabs" role="tablist">
   <button class="tab active" data-tab="engagement" type="button" role="tab" onclick="showTab('engagement')" style="position:relative;z-index:99999;pointer-events:auto">ENGAGEMENT</button>
-  <button class="tab"        data-tab="dope"       type="button" role="tab" onclick="showTab('dope')"       style="position:relative;z-index:99999;pointer-events:auto">DOPE TABLE</button>
   <button class="tab"        data-tab="gun"        type="button" role="tab" onclick="showTab('gun')"        style="position:relative;z-index:99999;pointer-events:auto">GUN STATS</button>
+  <button class="tab"        data-tab="dope"       type="button" role="tab" onclick="showTab('dope')"       style="position:relative;z-index:99999;pointer-events:auto">DOPE TABLE</button>
   <button class="tab"        data-tab="env"        type="button" role="tab" onclick="showTab('env')"        style="position:relative;z-index:99999;pointer-events:auto">ENVIRONMENT</button>
   <button class="tab"        data-tab="rte"        type="button" role="tab" onclick="showTab('rte')"        style="position:relative;z-index:99999;pointer-events:auto">R.T.E</button>
   <button class="tab"        data-tab="targets"    type="button" role="tab" onclick="showTab('targets')"    style="position:relative;z-index:99999;pointer-events:auto">TARGET CARD</button>
@@ -1027,7 +1102,7 @@ input:focus-visible, select:focus-visible {
   </div>
   <div class="card" style="margin-bottom:16px">
     <div class="sec">COLUMNS</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">
+    <div class="dope-cols-grid">
       <div class="tog"><input type="checkbox" id="out-elev" checked><label>Elevation</label></div>
       <div class="tog"><input type="checkbox" id="out-wind" checked onchange="if(this.checked)document.getElementById('out-multiwind').checked=false"><label>Windage</label></div>
       <div class="tog"><input type="checkbox" id="out-multiwind" onchange="if(this.checked)document.getElementById('out-wind').checked=false;toggleMultiWindPanel()"><label>Multi-Wind</label></div>
@@ -1089,6 +1164,24 @@ input:focus-visible, select:focus-visible {
               <div class="field"><label>MUZZLE VEL (m/s)</label><input type="number" id="gun-v0" value="805" step="1"></div>
               <div class="field"><label>BULLET WT (gr)</label><input type="number" id="gun-weight" value="175" step="0.1"></div>
             </div>
+            <div class="ammo-lot-panel" id="ammo-lot-panel">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:1px">
+                <label style="flex:1;color:var(--text-dim)">AMMO LOT</label>
+                <button class="btn sm" onclick="showAddLot()">+ LOT</button>
+                <button class="btn sm" id="btn-delete-lot" onclick="deleteAmmoLot()" style="display:none;color:var(--red,#f44);border-color:var(--red,#f44);opacity:0.8">&times; DEL</button>
+              </div>
+              <select id="ammo-lot-select" onchange="selectAmmoLot()" style="width:100%">
+                <option value="" disabled selected>— No Lots Saved —</option>
+              </select>
+              <div id="ammo-lot-add" style="display:none;margin-top:3px">
+                <div style="display:flex;gap:4px;align-items:center">
+                  <input type="text" id="lot-name-input" placeholder="Lot name" style="flex:1.4;min-width:0">
+                  <input type="number" id="lot-vel-input" placeholder="m/s" step="1" style="flex:0.6;min-width:0;width:60px">
+                  <button class="btn sm primary" onclick="saveAmmoLot()">SAVE</button>
+                  <button class="btn sm" onclick="hideAddLot()">&times;</button>
+                </div>
+              </div>
+            </div>
             <div class="g2">
               <div class="field"><label>BULLET DIAM (in)</label><input type="number" id="gun-diam" value="0.308" step="0.001"></div>
               <div class="field"><label>DRAG MODEL</label><select id="gun-drag"><option value="G7">G7</option><option value="G1">G1</option></select></div>
@@ -1105,7 +1198,7 @@ input:focus-visible, select:focus-visible {
         <div class="card">
           <div class="sec">CORRECTIONS</div>
           <div class="tog"><input type="checkbox" id="tog-spindrift" checked><label>Spin Drift</label></div>
-          <div class="tog"><input type="checkbox" id="tog-aerojump"><label>Aerodynamic Jump</label></div>
+          <div class="tog"><input type="checkbox" id="tog-aerojump" checked><label>Aerodynamic Jump</label></div>
           <div class="tog"><input type="checkbox" id="tog-coriolis"><label>Coriolis Effect</label></div>
           <div style="margin-top:10px" class="g2">
             <div class="field"><label>LATITUDE (&deg;)</label><input type="number" id="gun-lat" value="32" step="1" min="-90" max="90"></div>
@@ -1975,17 +2068,19 @@ function clicksToMrad(clicks, cu) {
   if (cu==='1moa')     return clicks*1.0/MRAD_TO_MOA;
   return clicks*0.1;
 }
+// Turret-resolution formatting: 0.1 MRAD / 0.25 MOA mechanical increments.
+// Internal float values remain at full IEEE-754 precision for cascade calculations.
 function fmtVal(mrad, unit, cu) {
-  if (unit==='mrad')   return mrad.toFixed(2)+' MRAD';
-  if (unit==='moa')    return mradToMoa(mrad).toFixed(2)+' MOA';
+  if (unit==='mrad')   return mrad.toFixed(1)+' MRAD';
+  if (unit==='moa')    return mradToMoa(mrad).toFixed(1)+' MOA';
   if (unit==='clicks') return Math.round(mradToClicks(mrad,cu))+' clk';
-  return mrad.toFixed(2);
+  return mrad.toFixed(1);
 }
 function fmtValNum(mrad, unit, cu) {
-  if (unit==='mrad')   return mrad.toFixed(2);
-  if (unit==='moa')    return mradToMoa(mrad).toFixed(2);
+  if (unit==='mrad')   return mrad.toFixed(1);
+  if (unit==='moa')    return mradToMoa(mrad).toFixed(1);
   if (unit==='clicks') return Math.round(mradToClicks(mrad,cu)).toString();
-  return mrad.toFixed(2);
+  return mrad.toFixed(1);
 }
 function fmtUnitLabel(u) { return u==='mrad'?'MRAD':u==='moa'?'MOA':'CLK'; }
 
@@ -2341,8 +2436,8 @@ function computeEngagement() {
     const windLbl = document.getElementById('sol-wind-lbl');
     if (windLbl) windLbl.innerHTML = arrow+' WINDAGE <span style="font-size:9px;opacity:0.5">HOLD '+dirLabel+'</span>';
 
-    if (activeUnit==='mrad') set('sol-wind-val', arrow+' '+absW.toFixed(2)+' MRAD');
-    else if (activeUnit==='moa') set('sol-wind-val', arrow+' '+mradToMoa(absW).toFixed(2)+' MOA');
+    if (activeUnit==='mrad') set('sol-wind-val', arrow+' '+absW.toFixed(1)+' MRAD');
+    else if (activeUnit==='moa') set('sol-wind-val', arrow+' '+mradToMoa(absW).toFixed(1)+' MOA');
     else set('sol-wind-val', arrow+' '+Math.round(mradToClicks(absW,cu))+' clk');
 
     set('sol-elev-sub', s.elev_mrad.toFixed(3)+' MRAD \u00B7 '+mradToMoa(s.elev_mrad).toFixed(2)+' MOA \u00B7 '+mradToClicks(s.elev_mrad,cu).toFixed(0)+' clk');
@@ -2363,7 +2458,7 @@ function computeEngagement() {
     if (hasCor||hasSD||hasAJ||hasIncl) {
       bdEl.style.display='block';
       if(incRow) incRow.style.display=hasIncl?'flex':'none';
-      if(hasIncl) set('bd-incline', ((s.incline_deg||0)>=0?'+':'')+(s.incline_deg||0).toFixed(1)+'\u00B0 \u2192 cos='+s.cosIncl.toFixed(4));
+      if(hasIncl) set('bd-incline', ((s.incline_deg||0)>=0?'+':'')+(s.incline_deg||0).toFixed(1)+'\u00B0 \u2192 cos='+(s.cosIncl||1).toFixed(4));
       // Spin drift in MRAD: sd_cm / range_m * 10
       const sd_mrad = range > 0 ? (s.sd_cm / 100) / range * 1000 : 0;
       set('bd-spindrift', hasSD ? sd_mrad.toFixed(3)+' MRAD ('+s.sd_cm.toFixed(1)+' cm)' : 'OFF');
@@ -2374,7 +2469,13 @@ function computeEngagement() {
     if(errEl) errEl.style.display='none';
 
 
-  } catch(e) { if(errEl) { errEl.textContent='ERROR: '+e.message; errEl.style.display='block'; } }
+  } catch(e) {
+    if(errEl) { errEl.textContent='ERROR: '+e.message; errEl.style.display='block'; }
+    set('sol-elev-val','\u2014'); set('sol-wind-val','\u2014');
+    set('sol-elev-sub',''); set('sol-wind-sub','');
+    set('sol-vel','\u2014'); set('sol-energy','\u2014'); set('sol-tof','\u2014'); set('sol-drop','\u2014');
+    const bd=document.getElementById('sol-breakdown'); if(bd) bd.style.display='none';
+  }
 }
 
 // ================================================================
@@ -2399,7 +2500,7 @@ function renderMultiWindRows() {
     h += '<input type="number" value="'+multiWindSpeeds[i]+'" min="0" max="200" step="1" '
        + 'style="width:70px;padding:4px 6px;min-height:32px;font-size:13px" '
        + 'onchange="multiWindSpeeds['+i+']=parseFloat(this.value)||0">';
-    h += '<span style="font-size:10px;color:var(--text-dim)">km/h</span>';
+    h += '<span style="font-size:10px;color:var(--text-dim)">'+(globalUnits==='imperial'?'mph':'km/h')+'</span>';
     if (multiWindSpeeds.length > 1) {
       h += '<button class="btn sm danger" onclick="removeMultiWind('+i+')" style="padding:2px 8px;min-height:28px;font-size:10px">&times;</button>';
     }
@@ -2486,7 +2587,7 @@ function generateDope() {
     if(oW) {
       const absWind = Math.abs(s.windage_mrad);
       const wDir = s.windage_mrad >= 0 ? ' R' : ' L';
-      const wNumStr = wu==='mrad' ? absWind.toFixed(2) : wu==='moa' ? mradToMoa(absWind).toFixed(2) : Math.round(mradToClicks(absWind,cu)).toString();
+      const wNumStr = wu==='mrad' ? absWind.toFixed(1) : wu==='moa' ? mradToMoa(absWind).toFixed(1) : Math.round(mradToClicks(absWind,cu)).toString();
       rows+='<td class="wind-val">'+wNumStr+wDir+'</td>';
     }
     if(oMW) {
@@ -2496,7 +2597,7 @@ function generateDope() {
           const wm = mwSol[ri].windage_mrad;
           const aw = Math.abs(wm);
           const wd = wm >= 0 ? ' R' : ' L';
-          const wStr = wu==='mrad' ? aw.toFixed(2) : wu==='moa' ? mradToMoa(aw).toFixed(2) : Math.round(mradToClicks(aw,cu)).toString();
+          const wStr = wu==='mrad' ? aw.toFixed(1) : wu==='moa' ? mradToMoa(aw).toFixed(1) : Math.round(mradToClicks(aw,cu)).toString();
           rows+='<td class="wind-val">'+wStr+wd+'</td>';
         } else {
           rows+='<td>&mdash;</td>';
@@ -2562,6 +2663,7 @@ function populateFormFromWeapon(w) {
   document.getElementById('gun-azimuth').value = w.azimuth||0;
   document.getElementById('gun-bc-segments').value = w.bcSegments||'';
   updateSgDisplay();
+  renderAmmoLots(w);
   computeEngagement();
   applyProfileLocks();
 }
@@ -2702,12 +2804,100 @@ function saveActiveWeapon() {
   const w = getWeaponFromForm(); w.id = activeWeaponId;
   // Preserve suppressed + pinned flags from library
   const existing = weaponLibrary.find(x=>x.id===activeWeaponId);
-  if (existing) { w.suppressed = existing.suppressed; w.isPinned = existing.isPinned; }
+  if (existing) { w.suppressed = existing.suppressed; w.isPinned = existing.isPinned; w.ammoLots = existing.ammoLots; }
   const idx = weaponLibrary.findIndex(x=>x.id===activeWeaponId);
   if (idx>=0) weaponLibrary[idx]=w; else weaponLibrary.push(w);
   saveWeaponLibrary(); renderWeaponList();
   const st=document.getElementById('gun-save-status');
   if(st) { st.textContent='SAVED'; setTimeout(()=>st.textContent='',2000); }
+}
+
+// ================================================================
+//   AMMO LOT TRACKING
+// ================================================================
+function showAddLot() {
+  const p = document.getElementById('ammo-lot-add');
+  if (p) p.style.display = 'block';
+  const inp = document.getElementById('lot-name-input');
+  if (inp) { inp.value = ''; inp.focus(); }
+  const velInp = document.getElementById('lot-vel-input');
+  if (velInp) velInp.value = '';
+}
+function hideAddLot() {
+  const p = document.getElementById('ammo-lot-add');
+  if (p) p.style.display = 'none';
+}
+function saveAmmoLot() {
+  const name = val('lot-name-input').trim();
+  if (!name || !activeWeaponId) return;
+  const v0 = parseFloat(val('lot-vel-input')) || parseFloat(val('gun-v0')) || 805;
+  const w = weaponLibrary.find(x => x.id === activeWeaponId);
+  if (!w) return;
+  if (!w.ammoLots) w.ammoLots = [];
+  w.ammoLots.push({ name, velocity: v0 });
+  saveWeaponLibrary();
+  renderAmmoLots(w);
+  hideAddLot();
+  // Auto-select the newly created lot
+  const sel = document.getElementById('ammo-lot-select');
+  if (sel) { sel.value = String(w.ammoLots.length - 1); selectAmmoLot(); }
+}
+function selectAmmoLot() {
+  const sel = document.getElementById('ammo-lot-select');
+  const delBtn = document.getElementById('btn-delete-lot');
+  if (!sel) return;
+  const hasSelection = sel.value !== '' && sel.value !== null;
+  if (delBtn) delBtn.style.display = hasSelection ? '' : 'none';
+  if (!hasSelection) return;
+  const idx = parseInt(sel.value, 10);
+  const w = weaponLibrary.find(x => x.id === activeWeaponId);
+  if (!w || !w.ammoLots || !w.ammoLots[idx]) return;
+  document.getElementById('gun-v0').value = w.ammoLots[idx].velocity;
+  computeEngagement();
+}
+function deleteAmmoLot() {
+  const sel = document.getElementById('ammo-lot-select');
+  if (!sel || !sel.value || !activeWeaponId) return;
+  const idx = parseInt(sel.value, 10);
+  const w = weaponLibrary.find(x => x.id === activeWeaponId);
+  if (!w || !w.ammoLots || !w.ammoLots[idx]) return;
+  w.ammoLots = w.ammoLots.filter((_, i) => i !== idx);
+  saveWeaponLibrary();
+  renderAmmoLots(w);
+  const delBtn = document.getElementById('btn-delete-lot');
+  if (delBtn) delBtn.style.display = 'none';
+}
+function rebuildAmmoLotDropdown() {
+  let sel = document.getElementById('ammo-lot-select');
+  if (!sel) return;
+  // Destroy existing custom wrapper
+  if (sel.nextSibling && sel.nextSibling.classList && sel.nextSibling.classList.contains('csel')) {
+    sel.nextSibling.remove();
+  }
+  // Clone node to purge locked Object.defineProperty on .value
+  const freshSel = sel.cloneNode(true);
+  sel.parentNode.replaceChild(freshSel, sel);
+  freshSel.dataset.upgraded = '';
+  freshSel.style.display = '';
+  upgradeSelectToCustom(freshSel);
+}
+function renderAmmoLots(w) {
+  const sel = document.getElementById('ammo-lot-select');
+  if (!sel) return;
+  const lots = (w && w.ammoLots) ? w.ammoLots : [];
+  let h = '';
+  if (lots.length === 0) {
+    h = '<option value="" disabled selected>\u2014 No Lots Saved \u2014</option>';
+  } else {
+    h = '<option value="">\u2014 No Lot Selected \u2014</option>';
+    for (let i = 0; i < lots.length; i++) {
+      h += '<option value="' + i + '">' + (i+1) + ' - ' + lots[i].name + ' - ' + lots[i].velocity + '</option>';
+    }
+  }
+  sel.innerHTML = h;
+  rebuildAmmoLotDropdown();
+  const delBtn = document.getElementById('btn-delete-lot');
+  if (delBtn) delBtn.style.display = 'none';
 }
 
 /** Create a new weapon with default ballistic parameters. isPinned defaults to false. */
@@ -3124,25 +3314,46 @@ function updateEnvDerived() {
 }
 
 function fetchWeather() {
-  const st=document.getElementById('env-status');
-  if(!navigator.geolocation){if(st)st.textContent='GPS NOT AVAILABLE';return;}
-  if(st)st.textContent='ACQUIRING GPS...';
-  navigator.geolocation.getCurrentPosition(async pos=>{
-    const {latitude:lat,longitude:lon,altitude:alt}=pos.coords;
-    if(st) st.textContent='GPS '+lat.toFixed(3)+', '+lon.toFixed(3)+' \u2014 FETCHING...';
-    try{
-      const url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,surface_pressure,relative_humidity_2m';
-      const d=await(await fetch(url)).json(); const c=d.current;
-      if(c){
-        document.getElementById('env-temp').value=c.temperature_2m.toFixed(1);
-        document.getElementById('env-pressure').value=c.surface_pressure.toFixed(1);
-        document.getElementById('env-humidity').value=Math.round(c.relative_humidity_2m);
-        if(alt)document.getElementById('env-altitude').value=Math.round(alt);
+  const st = document.getElementById('env-status');
+  if (!navigator.geolocation) { if(st) st.textContent = 'GPS NOT AVAILABLE'; return; }
+  if (st) st.textContent = 'ACQUIRING TACTICAL GPS...';
+
+  const geoOptions = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const { latitude:lat, longitude:lon, altitude:alt, accuracy } = pos.coords;
+
+    if (accuracy > 1500) {
+      if(st) st.textContent = 'POOR ACCURACY (' + Math.round(accuracy) + 'm). TRY OUTDOORS.';
+      return;
+    }
+
+    if(st) st.textContent = 'GPS ' + lat.toFixed(3) + ', ' + lon.toFixed(3) + ' — FETCHING...';
+
+    try {
+      const cb = new Date().getTime();
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,surface_pressure,relative_humidity_2m&timezone=auto&_=' + cb;
+
+      const res = await fetch(url, { cache: 'no-store' });
+      const d = await res.json();
+      const c = d.current;
+
+      if (c) {
+        document.getElementById('env-temp').value = c.temperature_2m.toFixed(1);
+        document.getElementById('env-pressure').value = c.surface_pressure.toFixed(1);
+        document.getElementById('env-humidity').value = Math.round(c.relative_humidity_2m);
+        if (alt && alt > -500 && alt < 9000) {
+          document.getElementById('env-altitude').value = Math.round(alt);
+        }
         updateEnvDerived();
-        if(st) st.textContent='UPDATED ('+lat.toFixed(2)+', '+lon.toFixed(2)+')';
+        if (st) st.textContent = 'UPDATED (Acc: ' + Math.round(accuracy) + 'm)';
       }
-    }catch(e){if(st)st.textContent='ERR: '+e.message;}
-  }, err=>{if(st)st.textContent='GPS ERR: '+err.message;});
+    } catch(e) {
+      if(st) st.textContent = 'ERR: ' + e.message;
+    }
+  }, err => {
+    if(st) st.textContent = 'GPS ERR: ' + err.message;
+  }, geoOptions);
 }
 
 // ================================================================
@@ -3190,32 +3401,40 @@ function generateQuickWind() {
   try {
     const params = buildParams();
 
-    // STEP A: 10 km/h = 2.7778 m/s pure crosswind (90 deg)
-    const testWind_ms = 10 / 3.6; // 2.7778 m/s
-    const tp = {...params, wind_vx: 0, wind_vz: testWind_ms, wind_lateral_mps: testWind_ms};
+    // 10 km/h = 2.7778 m/s pure crosswind
+    const testWind_ms = 10 / 3.6;
+    const tp = { ...params, wind_vx: 0, wind_vz: testWind_ms, wind_lateral_mps: testWind_ms };
+
     const sampleRanges = [300, 400, 500, 600];
     const sol = computeSolution(tp, sampleRanges);
+
     if (!sol.length) { elVal.textContent = '\u2014'; elUnit.textContent = ''; return; }
 
-    // STEP B–D: For each range, compute local QckWnd and average
     let sum = 0, count = 0;
+    const zeroWindOff = clicksToMrad(tp.zeroWindOff || 0, tp.clickUnit);
+
     for (const s of sol) {
-      const drift_mrad = Math.abs(s.windage_mrad);
-      if (drift_mrad < 1e-6) continue; // guard against zero drift
-      // Target drift = 0.1 MRAD per 100 m of range
+      const effR = s.range * s.cosIncl;
+
+      // 1. Reconstruct total lateral displacement in meters
+      const total_lat_m = Math.tan((s.windage_mrad - zeroWindOff) / 1000) * effR;
+
+      // 2. Mathematically subtract secondary drifts to isolate pure wind deflection
+      const pure_wind_m = total_lat_m - (s.sd_cm / 100) - (s.cor_cm / 100);
+      const pure_drift_mrad = Math.abs(Math.atan2(pure_wind_m, effR) * 1000);
+
+      if (pure_drift_mrad < 1e-6) continue;
+
+      // 3. Target drift: 0.1 MRAD per 100m of range
       const targetDrift = (s.range / 100) * 0.1;
-      // Local QckWnd = testWind × (targetDrift / actualDrift)
-      const localQW_kmh = 10 * (targetDrift / drift_mrad);
+      const localQW_kmh = 10 * (targetDrift / pure_drift_mrad);
       sum += localQW_kmh;
       count++;
     }
 
     if (count === 0) { elVal.textContent = '\u2014'; elUnit.textContent = ''; return; }
 
-    // STEP E: Average and round to 1 decimal
-    const qw = (sum / count).toFixed(1);
-
-    elVal.textContent = qw;
+    elVal.textContent = (sum / count).toFixed(1);
     elUnit.textContent = 'km/h';
   } catch(e) {
     elVal.textContent = '\u2014';
@@ -3571,9 +3790,23 @@ function applyProfileLocks() {
   const isAmmoLocked = ammoId !== '';
 
   // Weapon-locked fields: Profile Name, Twist
-  const weaponLockedIds = ['gun-name', 'gun-twist'];
+  const weaponLockedIds = ['gun-name', 'gun-twist', 'gun-drag'];
   // Ammo-locked fields: Bullet Wt, Bullet Diam, Drag Model, BC, Bullet Length
   const ammoLockedIds = ['gun-weight', 'gun-diam', 'gun-drag', 'gun-bc', 'gun-length'];
+
+  // Lock ammo dropdown for default weapon profiles
+  const ammoDd = document.getElementById('ammo-dd-selected');
+  if (ammoDd) {
+    if (isWeaponLocked) {
+      ammoDd.style.opacity = '0.5';
+      ammoDd.style.pointerEvents = 'none';
+      ammoDd.style.cursor = 'not-allowed';
+    } else {
+      ammoDd.style.opacity = '';
+      ammoDd.style.pointerEvents = '';
+      ammoDd.style.cursor = '';
+    }
+  }
 
   // Process weapon-locked fields
   for (const id of weaponLockedIds) {
