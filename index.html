@@ -1322,7 +1322,7 @@ input:focus-visible, select:focus-visible {
             <button type="button" class="env-src-btn active" data-src="manual"
                     onclick="setEnvSource('manual')" role="tab" aria-selected="true">MANUAL</button>
             <button type="button" class="env-src-btn" data-src="gps"
-                    onclick="setEnvSource('gps')" role="tab" aria-selected="false">GPS</button>
+                    onclick="setEnvSource('gps')" role="tab" aria-selected="false">AUTO</button>
           </div>
         </div>
         <div class="env-inputs">
@@ -1349,10 +1349,10 @@ input:focus-visible, select:focus-visible {
         </div>
         <div class="env-footnote">
           <a id="env-icao-link" class="env-icao-link" onclick="applyStandardICAO()"
-             title="Reset to ICAO standard atmosphere: 15&deg;C, 1013.25 hPa, 0% RH, 0 m">Use Standard ICAO</a>
-          <button type="button" id="env-hybrid-sync" class="env-refresh-btn"
+             title="Reset to ICAO standard atmosphere: 15&deg;C, 1013.25 hPa, 0% RH, 0 m">Reset to Standard ICAO</a>
+          <button type="button" id="env-gps-refresh" class="btn primary" style="width:100%"
                   onclick="syncHybridEnvironment()"
-                  title="Hybrid Sync: GPS + Open-Meteo (T/RH) + device Barometer for true station pressure (QFE)">&#8644; AUTO SYNC (GPS + SENSORS)</button>
+                  title="Sync environmental data: GPS + Open-Meteo (T/RH) + device barometer for true station pressure (QFE)">SYNC ENVIRONMENTAL DATA</button>
           <div id="env-status" class="status-line" style="margin-left:auto"></div>
         </div>
       </div>
